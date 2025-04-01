@@ -52,6 +52,8 @@ double polybench_program_total_flops = 0;
 double polybench_t_start, polybench_t_end;
 /* Timer code (RDTSC). */
 unsigned long long int polybench_c_start, polybench_c_end;
+/* Timer code (rdinst). */
+unsigned long long int polybench_i_start = 0, polybench_i_end = 0;
 
 static
 double rtclock()
@@ -69,20 +71,35 @@ double rtclock()
 }
 
 
+#ifdef POLYBENCH_CYCLE_ACCURATE_TIMER
+#if defined(__riscv)
+static unsigned long long int rdinst() {
+  size_t tmp = 0;
+  __asm__ volatile("csrr %0, instret" : "=r"(tmp));
+  return tmp;
+}
+
+static unsigned long long int rdcycle() {
+  size_t tmp = 0;
+  __asm__ volatile("csrr %0, cycle" : "=r"(tmp));
+  return tmp;
+}
+#elif defined(__x86_64)
 static
 unsigned long long int rdtsc()
 {
   unsigned long long int ret = 0;
   unsigned int cycles_lo;
   unsigned int cycles_hi;
-
-#ifdef POLYBENCH_CYCLE_ACCURATE_TIMER
   __asm__ volatile ("RDTSC" : "=a" (cycles_lo), "=d" (cycles_hi));
   ret = (unsigned long long int)cycles_hi << 32 | cycles_lo;
-#endif
 
   return ret;
 }
+#else
+#error "Unsupport platform"
+#endif
+#endif
 
 void polybench_flush_cache()
 {
@@ -348,6 +365,9 @@ void polybench_timer_start_()
   polybench_prepare_instruments_ ();
 #ifndef POLYBENCH_CYCLE_ACCURATE_TIMER
   polybench_t_start = rtclock ();
+#elif defined(__riscv)
+  polybench_i_start = rdinst();
+  polybench_c_start = rdcycle();
 #else
   polybench_c_start = rdtsc ();
 #endif
@@ -358,6 +378,9 @@ void polybench_timer_stop_()
 {
 #ifndef POLYBENCH_CYCLE_ACCURATE_TIMER
   polybench_t_end = rtclock ();
+#elif defined(__riscv)
+  polybench_c_end = rdcycle();
+  polybench_i_end = rdinst();
 #else
   polybench_c_end = rdtsc ();
 #endif
@@ -383,7 +406,8 @@ void polybench_timer_print_()
 # ifndef POLYBENCH_CYCLE_ACCURATE_TIMER
       printf ("%0.6f\n", polybench_t_end - polybench_t_start);
 # else
-      printf ("%Ld\n", polybench_c_end - polybench_c_start);
+      printf ("%lld\n", polybench_c_end - polybench_c_start);
+      printf ("%lld\n", polybench_i_end - polybench_i_start);
 # endif
 #endif
 }
