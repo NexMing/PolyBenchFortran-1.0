@@ -16,6 +16,7 @@
 
       program trisolv
       implicit none
+      external kernel_trisolv
 
       POLYBENCH_2D_ARRAY_DECL(a,DATA_TYPE,N, N)
       POLYBENCH_1D_ARRAY_DECL(x,DATA_TYPE,N)
@@ -84,24 +85,5 @@
         end subroutine
 
 
-        subroutine kernel_trisolv(n , a, x, c)
-        implicit none
-
-        DATA_TYPE, dimension(n, n) :: a
-        DATA_TYPE, dimension(n) :: c
-        DATA_TYPE, dimension(n) :: x
-        integer :: n
-        integer :: i, j
-
-!$pragma scop
-        do i = 1, _PB_N
-          x(i) = c(i)
-          do j = 1, i - 1
-            x(i) = x(i) - (a(j, i) * x(j))
-          end do
-          x(i) = x(i) / a(i, i)
-        end do
-!$pragma endscop
-        end subroutine
 
       end program
