@@ -106,6 +106,4 @@
         write(0, *)
         end subroutine
       
-
-
       end program
