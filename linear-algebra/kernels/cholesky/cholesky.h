@@ -38,9 +38,21 @@
 
 # define _PB_N POLYBENCH_LOOP_BOUND(N,n)
 
-# ifndef DATA_TYPE
-#  define DATA_TYPE double precision
+/* Default data type */
+# if !defined(DATA_TYPE_IS_FLOAT) && !defined(DATA_TYPE_IS_DOUBLE)
+#  define DATA_TYPE_IS_DOUBLE
+# endif
+
+# ifdef DATA_TYPE_IS_FLOAT
+#  define DATA_TYPE real(kind=4)
 #  define DATA_PRINTF_MODIFIER "(f0.2,1x)", advance='no'
+#  define SCALAR_VAL(x) real(x, kind=4)
+# endif
+
+# ifdef DATA_TYPE_IS_DOUBLE
+#  define DATA_TYPE real(kind=8)
+#  define DATA_PRINTF_MODIFIER "(f0.2,1x)", advance='no'
+#  define SCALAR_VAL(x) real(x, kind=8)
 # endif
 
 

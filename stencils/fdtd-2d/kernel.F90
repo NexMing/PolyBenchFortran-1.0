@@ -31,17 +31,17 @@
           end do
           do i = 2, _PB_NX
             do j = 1, _PB_NY
-              ey(j, i) = ey(j, i) - (0.5D0 * (hz(j, i) - hz(j, i - 1)))
+              ey(j, i) = ey(j, i) - (SCALAR_VAL(0.5) * (hz(j, i) - hz(j, i - 1)))
             end do
           end do
           do i = 1, _PB_NX
             do j = 2, _PB_NY
-              ex(j, i) = ex(j, i) - (0.5D0 * (hz(j, i) - hz(j - 1, i)))
+              ex(j, i) = ex(j, i) - (SCALAR_VAL(0.5) * (hz(j, i) - hz(j - 1, i)))
             end do
           end do
           do i = 1, _PB_NX - 1
             do j = 1, _PB_NY - 1
-              hz(j, i) = hz(j, i) - (0.7D0 * (ex(j + 1, i) - ex(j, i)  &
+              hz(j, i) = hz(j, i) - (SCALAR_VAL(0.7) * (ex(j + 1, i) - ex(j, i)  &
                                            + ey(j, i + 1) - ey(j, i)))
             end do
           end do

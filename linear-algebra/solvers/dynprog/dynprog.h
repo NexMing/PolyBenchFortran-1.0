@@ -44,10 +44,8 @@
 # define _PB_TSTEPS POLYBENCH_LOOP_BOUND(TSTEPS,tsteps)
 # define _PB_LENGTH POLYBENCH_LOOP_BOUND(LENGTH,length)
 
-# ifndef DATA_TYPE
 #  define DATA_TYPE integer
 #  define DATA_PRINTF_MODIFIER "(i0,1x)", advance='no'
-# endif
 
 
 #endif /* !DYNPROG */

@@ -26,8 +26,8 @@
         do t = 1, _PB_TSTEPS
           do i = 2, _PB_N - 1
             do j = 2, _PB_N - 1
-              b(j, i) = 0.2D0 * (a(j, i) + a(j - 1, i) + a(1 + j, i) + &
-                                 a(j, 1 + i) + a(j, i - 1))
+              b(j, i) = SCALAR_VAL(0.2) * (a(j, i) + a(j - 1, i) + a(1 + j, i) + &
+                                           a(j, 1 + i) + a(j, i - 1))
             end do
           end do
           do i = 2, _PB_N - 1

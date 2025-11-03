@@ -50,8 +50,18 @@
 # define _PB_CYM POLYBENCH_LOOP_BOUND(CYM,cym)
 # define _PB_CXM POLYBENCH_LOOP_BOUND(CXM,cxm)
 
-# ifndef DATA_TYPE
-#  define DATA_TYPE double precision
+/* Default data type */
+# if !defined(DATA_TYPE_IS_FLOAT) && !defined(DATA_TYPE_IS_DOUBLE)
+#  define DATA_TYPE_IS_DOUBLE
+# endif
+
+# ifdef DATA_TYPE_IS_FLOAT
+#  define DATA_TYPE real(kind=4)
+#  define DATA_PRINTF_MODIFIER "(f0.2,1x)", advance='no'
+# endif
+
+# ifdef DATA_TYPE_IS_DOUBLE
+#  define DATA_TYPE real(kind=8)
 #  define DATA_PRINTF_MODIFIER "(f0.2,1x)", advance='no'
 # endif
 

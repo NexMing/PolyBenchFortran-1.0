@@ -62,8 +62,18 @@
 # define _PB_NL POLYBENCH_LOOP_BOUND(NL,nl)
 # define _PB_NM POLYBENCH_LOOP_BOUND(NM,nm)
 
-# ifndef DATA_TYPE
-#  define DATA_TYPE double precision
+/* Default data type */
+# if !defined(DATA_TYPE_IS_FLOAT) && !defined(DATA_TYPE_IS_DOUBLE)
+#  define DATA_TYPE_IS_DOUBLE
+# endif
+
+# ifdef DATA_TYPE_IS_FLOAT
+#  define DATA_TYPE real(kind=4)
+#  define DATA_PRINTF_MODIFIER "(f0.2,1x)", advance='no'
+# endif
+
+# ifdef DATA_TYPE_IS_DOUBLE
+#  define DATA_TYPE real(kind=8)
 #  define DATA_PRINTF_MODIFIER "(f0.2,1x)", advance='no'
 # endif
 

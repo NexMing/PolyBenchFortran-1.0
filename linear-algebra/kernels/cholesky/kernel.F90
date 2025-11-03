@@ -29,7 +29,7 @@
           do j = 1, i - 1
             x = x - a(j, i) * a(j, i)
           end do
-          p(i) = 1.0D0 / sqrt(x)
+          p(i) = SCALAR_VAL(1.0) / sqrt(x)
           do j = i + 1, _PB_N
             x = a(j, i)
             do k = 1, i - 1

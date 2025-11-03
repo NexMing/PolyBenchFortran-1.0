@@ -50,10 +50,8 @@
 # define _PB_LENGTH POLYBENCH_LOOP_BOUND(LENGTH,length)
 # define _PB_MAXGRID POLYBENCH_LOOP_BOUND(MAXGRID,maxgrid)
 
-# ifndef DATA_TYPE
 #  define DATA_TYPE integer
 #  define DATA_PRINTF_MODIFIER "(i0,1x)", advance='no'
-# endif
 
 
 #endif /* !REG_DETECT */
