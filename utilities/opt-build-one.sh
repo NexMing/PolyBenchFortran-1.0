@@ -135,7 +135,8 @@ run $MLIR_OPT_1 --lift-cf-to-scf --cse --canonicalize --fold-memref-alias-ops \
     $FSRC_2.opt1.mlir -o $FSRC_2.opt2.mlir
 
 echoB "Generating $FSRC_2.opt3.mlir ..."
-run $MLIR_OPT_1 --raise-scf-to-affine --affine-raise-from-memref --cse --canonicalize \
+run $MLIR_OPT_1 --raise-scf-to-affine --affine-loop-invariant-code-motion --affine-raise-from-memref \
+    --cse --canonicalize \
     $FSRC_2.opt2.mlir -o $FSRC_2.opt3.mlir
 
 echoB "Generating $FSRC_2.opt4.mlir ..."
