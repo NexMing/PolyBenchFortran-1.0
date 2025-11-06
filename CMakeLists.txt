@@ -4,9 +4,12 @@ project(PolyBenchFortran)
 
 enable_language(Fortran)
 
+set(POLYBENCH_DATASET "standard" CACHE STRING "Select polybench dataset")
+set_property(CACHE POLYBENCH_DATASET PROPERTY STRINGS mini small standard large extralarge)
+
 if(CMAKE_Fortran_COMPILER_ID STREQUAL "GNU")
     message(STATUS "Using GNU Fortran")
-    add_compile_options(-ffree-line-length-none)
+    set(CMAKE_Fortran_FLAGS "${CMAKE_Fortran_FLAGS} -ffree-line-length-none")
 elseif(CMAKE_Fortran_COMPILER_ID STREQUAL "LLVMFlang")
     message(STATUS "Using LLVMFlang Fortran")
 else()
@@ -17,6 +20,24 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 include_directories(utilities)
 add_library(fpolybench utilities/fpolybench.c)
 link_libraries(fpolybench)
+
+if(POLYBENCH_DATASET STREQUAL "mini")
+    message(STATUS "Use polybench mini dataset")
+    add_compile_definitions(MINI_DATASET)
+elseif(POLYBENCH_DATASET STREQUAL "small")
+    message(STATUS "Use polybench small dataset")
+    add_compile_definitions(SMALL_DATASET)
+elseif(POLYBENCH_DATASET STREQUAL "standard")
+    message(STATUS "Use polybench standard dataset")
+elseif(POLYBENCH_DATASET STREQUAL "large")
+    message(STATUS "Use polybench large dataset")
+    add_compile_definitions(LARGE_DATASET)
+elseif(POLYBENCH_DATASET STREQUAL "extralarge")
+    message(STATUS "Use polybench extralarge dataset")
+    add_compile_definitions(EXTRALARGE_DATASET)
+else()
+    message(FATAL_ERROR "Unknown polybench dataset: ${POLYBENCH_DATASET}")
+endif()
 
 add_compile_definitions(
     POLYBENCH_TIME
